@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PythonForSimplex - Antoine Lesort", "PythonForSimplex - Antoine Lesort.pyproj", "{4DE93E3E-C41C-43C6-BBFB-AB1791C07309}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4DE93E3E-C41C-43C6-BBFB-AB1791C07309}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DE93E3E-C41C-43C6-BBFB-AB1791C07309}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {07F41C4A-6F1E-4C87-B292-3C5876A9EF94}
+	EndGlobalSection
+EndGlobal
