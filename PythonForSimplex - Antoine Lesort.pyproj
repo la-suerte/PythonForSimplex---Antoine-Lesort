@@ -11,6 +11,10 @@
     <OutputPath>.</OutputPath>
     <Name>PythonForSimplex - Antoine Lesort</Name>
     <RootNamespace>PythonForSimplex - Antoine Lesort</RootNamespace>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterArguments>
+    </InterpreterArguments>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>

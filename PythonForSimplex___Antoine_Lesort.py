@@ -5,7 +5,6 @@ import argparse
 import numpy as np
 
 
-# Function to get input from the user
 def get_lp_input():
     print("Enter the number of variables:")
     n_vars = int(input())
@@ -58,19 +57,16 @@ def get_lp_input_2(filename):
 
     print("The constraints : \n")
     for row in rows[1:]:
-        # Ensure the last two elements are inequality and bound
         coeffs = [float(x) for x in row[:n_vars]]
         inequality = row[n_vars]
         bound = float(row[n_vars + 1])
         print(f'{coeffs} {inequality} {bound}')
 
 
-        # Validate the number of coefficients matches the objective function
         if len(coeffs) != n_vars:
             raise ValueError(f"Number of coefficients in constraint does not match number of objective function variables. Expected {n_vars}, got {len(coeffs)}.")
         
         
-        # Convert inequalities to proper form
         if inequality == '<=':
             constraints.append((coeffs, '<=', bound))
         elif inequality == '>=':
@@ -89,12 +85,9 @@ def solve_with_ortools(n_vars, obj_coeffs, constraints):
         print("Solver not available.")
         return
 
-    # Dynamically create variables
     vars = [solver.NumVar(0, solver.infinity(), f"x{i}") for i in range(n_vars)]
-    # Set the objective function
     solver.Maximize(sum(obj_coeffs[i] * vars[i] for i in range(n_vars)))
 
-    # Add constraints
     for coeffs, inequality, bound in constraints:
         expr = sum(coeffs[i] * vars[i] for i in range(n_vars))
         if inequality == "<=":
@@ -121,26 +114,20 @@ def initialize_tableau(n_vars, obj_coeffs, constraints):
     Initializes the simplex tableau with slack/surplus variables as needed.
     """
     num_constraints = len(constraints)
-    # The tableau will have additional columns for slack/surplus variables + 1 column for RHS.
     tableau = np.zeros((num_constraints + 1, n_vars + num_constraints + 1))
 
-    # Fill in the objective row (last row in tableau)
     tableau[-1, :n_vars] = -np.array(obj_coeffs)  # Negative for maximization
 
-    # Fill in constraints with appropriate slack/surplus variables
     for i, (coeffs, inequality, bound) in enumerate(constraints):
         tableau[i, :n_vars] = coeffs  # Coefficients for the variables
         
-        # Add slack/surplus variable depending on inequality
         if inequality == "<=":
             tableau[i, n_vars + i] = 1  # Slack variable
         elif inequality == ">=":
             tableau[i, n_vars + i] = -1  # Surplus variable
         else:
-            # If it's an equality, add as a slack to ensure a feasible tableau
             tableau[i, n_vars + i] = 1
         
-        # Set RHS value for each constraint
         tableau[i, -1] = bound
 
     return tableau
@@ -191,13 +178,12 @@ def print_tableau(tableau, pivot_col=None):
     """
     Print the tableau, highlighting the pivot column in red.
     """
-    red_color = '\033[91m'  # ANSI escape code for red text
-    reset_color = '\033[0m'  # ANSI escape code to reset color
+    red_color = '\033[91m'  
+    reset_color = '\033[0m' 
 
     for i, row in enumerate(tableau):
         for j, value in enumerate(row):
             if j == pivot_col:
-                # Print in red if it's the pivot column
                 print(f"{red_color}{value:>10.2f}{reset_color}", end=" ")
             else:
                 print(f"{value:>10.2f}", end=" ")
@@ -207,29 +193,24 @@ def solve_with_simplex(n_vars, obj_coeffs, constraints):
     """
     Solve the LP using the Simplex method with tableau representation.
     """
-    # Step 1: Initialize tableau
     tableau = initialize_tableau(n_vars, obj_coeffs, constraints)
     print("Initial Tableau:")
     print_tableau(tableau)
     print()
 
     while True:
-        # Step 2: Find pivot column
         pivot_col = find_pivot_column(tableau)
         if pivot_col == -1:
             print("Optimal solution found.")
             break  # Optimal solution found
 
-        # Step 3: Find pivot row
         pivot_row = find_pivot_row(tableau, pivot_col)
         if pivot_row == -1:
             print("The problem is unbounded.")
             return  # Unbounded solution
 
-        # Step 4: Perform pivot operation
         pivot(tableau, pivot_row, pivot_col)
 
-        # Print current tableau after pivoting
         print("Updated Tableau:")
         print_tableau(tableau, pivot_col)
         print()
